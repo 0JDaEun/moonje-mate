@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/logo1.png" width="112" alt="문제메이트 로고"></p>
+![Moonje Mate — project overview](docs/images/project-cover.svg)
 
 # 문제메이트 · Moonje Mate
 
@@ -7,6 +7,8 @@
 산업공학 캡스톤 팀 프로젝트 (2024) · Flutter / Dart · OpenAI API · OCR · Supabase
 
 [팀 프로젝트 저장소](https://github.com/leunchan/brain-app) · [핵심 구현](lib/screen/chat_screen.dart) · [문제 보관함](lib/screen/storage_date_screen.dart)
+
+<p><img src="assets/logo1.png" width="72" alt="문제메이트 앱 로고"></p>
 
 ## 01. 프로젝트 배경
 
