@@ -68,6 +68,8 @@ test/                Flutter 테스트 파일
 pubspec.yaml         의존성 및 리소스 정의
 ```
 
+> **유지보수 상태 (2026-11-26)**: 2024년 팀 프로젝트 원본을 보존하고 있다. 현재 기본 브랜치의 기존 인증 정보로 앱을 실행하지 않는다. 별도의 보안 검토 브랜치에서 AI·OCR 서버 프록시와 서명 설정 분리를 구현했으며, [오프라인 CI 17개 테스트](https://github.com/0JDaEun/moonje-mate/actions/runs/45729279941)가 통과했다. 실제 기기·외부 API 연결 및 키 교체는 미검증/미완료 상태다. [검토용 실행 가이드](https://github.com/0JDaEun/moonje-mate/blob/security/config-hardening/docs/SECURITY_SETUP.md) · [검증 범위](https://github.com/0JDaEun/moonje-mate/blob/security/config-hardening/docs/SECURITY_VALIDATION.md)
+
 ## 07. 실행 및 검증
 
 Flutter와 Dart SDK (pubspec 기준 Dart 3.1.3 이상, 4.0 미만), 모바일 실행 환경 및 별도로 설정한 API·DB 연결이 필요하다.
