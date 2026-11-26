@@ -1,6 +1,6 @@
 # Security migration — review branch
 
-This branch removes the embedded AI credential and direct provider calls from the Flutter application. A backend proxy is required before testing the AI/OCR features. **No proxy implementation or live deployment is included.** The default branch has not been changed.
+This branch removes the embedded AI credential and direct provider calls from the Flutter application. A backend proxy is required before testing the AI/OCR features. A review implementation is available in [backend](../backend/README.md); no live deployment is included. The default branch has not been changed.
 
 ## Client configuration
 
@@ -21,7 +21,7 @@ Copy android/key.properties.example to android/key.properties and configure the 
 ## Before merge
 
 1. Rotate/revoke the exposed provider key with its issuer and review billing. Verify Supabase RLS and key roles.
-2. Implement and deploy the authenticated proxy, configure secrets only there, then verify chat, OCR, login and logout on a device.
+2. Review and deploy the authenticated proxy, configure secrets only there, then verify chat, OCR, login and logout on a device.
 3. Run flutter analyze, flutter test and the Android debug build; verify signed release separately.
 4. Review historical copies and coordinate any history cleanup with collaborators. Removing a key or keystore from the tip does not remove it from old commits.
 
