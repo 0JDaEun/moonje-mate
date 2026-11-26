@@ -1,0 +1,23 @@
+name: Proxy offline tests
+on:
+  push:
+    branches: [security/config-hardening]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/proxy-offline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Compile and test without provider calls
+        working-directory: backend
+        run: |
+          python3 -m compileall -q proxy.py test_proxy.py
+          python3 -m unittest -v
