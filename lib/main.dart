@@ -15,11 +15,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // main 메서드에서 비동기로 데이터를 다루는 상황이 있을 때 반드시 최초에 호출해줘야 되는 메서드
-  await Supabase.initialize(
-    url: 'https://sdncltappldozngyrnhu.supabase.co',
-    anonKey:
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkbmNsdGFwcGxkb3puZ3lybmh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE3MTM2MjAsImV4cCI6MjAyNzI4OTYyMH0.g2UQuA4z6T8_KUoAJve-uI4Ps31cD8ZD0s9vKQtTDx0'
-  );
+  const supabaseUrl = String.fromEnvironment('SUPABASE_URL');
+  const supabaseAnonKey = String.fromEnvironment('SUPABASE_ANON_KEY');
+  if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
+    throw StateError('Configure SUPABASE_URL and SUPABASE_ANON_KEY.');
+  }
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);
 
   runApp(const MyApp());
 }

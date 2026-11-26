@@ -13,8 +13,26 @@ import '../model/problem.dart';
 import '../widget/text_fields.dart';
 import '../widget/texts.dart';
 
-const apiKey = '';
-const apiUrl = 'https://api.openai.com/v1/chat/completions';
+// Public configuration only. Provider credentials belong on the backend.
+const _proxyBase = String.fromEnvironment('MOONJE_PROXY_BASE_URL');
+
+Uri _proxyUri(String endpoint) {
+  final base = Uri.tryParse(_proxyBase);
+  if (base == null || base.scheme != 'https' || base.host.isEmpty ||
+      base.userInfo.isNotEmpty || base.hasQuery || base.hasFragment) {
+    throw StateError('Configure an HTTPS MOONJE_PROXY_BASE_URL.');
+  }
+  final prefix = base.path.replaceFirst(RegExp(r'/$'), '');
+  return base.replace(path: '$prefix/$endpoint');
+}
+
+Map<String, String> _proxyHeaders() {
+  final token = Supabase.instance.client.auth.currentSession?.accessToken;
+  if (token == null || token.isEmpty) {
+    throw StateError('Sign in before requesting AI processing.');
+  }
+  return {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'};
+}
 final supabase = Supabase.instance.client;
 
 // 객관식 주관식 기능 추가 예정
@@ -190,11 +208,8 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiKey',
-      },
+      _proxyUri('chat'),
+      headers: _proxyHeaders(),
       body: jsonEncode(
         {
           "model": "gpt-4o",
@@ -249,8 +264,7 @@ class _ChatScreenState extends State<ChatScreen> {
     var bytes = File(imageFile.path).readAsBytesSync();
     String img64 = base64Encode(bytes);
 
-    var url =
-        'https://u61i753n2w.apigw.ntruss.com/custom/v1/31487/db949762f3619583be72351a3bf1c27134bff6b18c47525d1778ea53217e866a/general';
+    final url = _proxyUri('ocr');
 
     var payload = {
       "version": "V1",
@@ -263,14 +277,10 @@ class _ChatScreenState extends State<ChatScreen> {
       "resultType": "string"
     };
 
-    var headers = {
-      
-      // 올바른 API 키를 사용하세요.
-      "Content-Type": "application/json"
-    };
+    final headers = _proxyHeaders();
 
     var response = await http.post(
-      Uri.parse(url),
+      url,
       headers: headers,
       body: jsonEncode(payload),
     );

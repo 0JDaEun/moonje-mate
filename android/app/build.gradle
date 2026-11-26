@@ -12,6 +12,14 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+// Release signing configuration is kept outside version control.
+def signingProperties = new Properties()
+def signingPropertiesFile = rootProject.file('key.properties')
+if (signingPropertiesFile.exists()) {
+    signingPropertiesFile.withInputStream { signingProperties.load(it) }
+}
+def releaseSigningReady = ['keyAlias', 'keyPassword', 'storeFile', 'storePassword'].every { signingProperties.getProperty(it)?.trim() }
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -45,16 +53,21 @@ android {
 
     signingConfigs {
         release {
-            keyAlias 'key0'
-            keyPassword 'moon240614'
-            storeFile file('moonje_mate.jks')
-            storePassword 'moon0614'
+            if (releaseSigningReady) {
+                keyAlias signingProperties.getProperty('keyAlias')
+                keyPassword signingProperties.getProperty('keyPassword')
+                storeFile rootProject.file(signingProperties.getProperty('storeFile'))
+                storePassword signingProperties.getProperty('storePassword')
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+
+            if (releaseSigningReady) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled true // 코드 축소 활성화
             shrinkResources true // 사용하지 않는 리소스 제거 활성화
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
